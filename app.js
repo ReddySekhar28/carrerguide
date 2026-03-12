@@ -127,15 +127,26 @@ function updateProgressTracker(viewName) {
 function handleAuth(event, type) {
     event.preventDefault();
     
-    // Standard email/pass login
+    // Retrieve registered users from localStorage
+    const registeredUsers = JSON.parse(localStorage.getItem('skillsync_registered_users') || '[]');
+
     if (type === 'login') {
         const email = document.getElementById('login-email').value;
         const pass = document.getElementById('login-password').value;
         
-        if (email && pass) {
-            proceedWithLogin({ email, name: email.split('@')[0], type: 'email' });
+        // Check if user is registered and password matches
+        const user = registeredUsers.find(u => u.email === email && u.password === pass);
+        
+        if (user) {
+            proceedWithLogin({ email: user.email, name: user.name, type: 'email' });
         } else {
-            showToast('Please enter credentials', 'error');
+            const userExists = registeredUsers.some(u => u.email === email);
+            if (userExists) {
+                showToast('Invalid password. Please try again.', 'error');
+            } else {
+                showToast('Account not found. Please Sign In first.', 'warning');
+                switchAuthTab('signup'); // Prompt to Register
+            }
         }
     } else {
         const name = document.getElementById('signup-name').value;
@@ -143,7 +154,22 @@ function handleAuth(event, type) {
         const pass = document.getElementById('signup-password').value;
 
         if (name && email && pass) {
-            proceedWithLogin({ email, name, type: 'email' });
+            // Check if user already exists
+            if (registeredUsers.some(u => u.email === email)) {
+                showToast('Email already registered. Please Log In.', 'info');
+                switchAuthTab('login');
+                return;
+            }
+
+            // Register new user
+            registeredUsers.push({ name, email, password: pass });
+            localStorage.setItem('skillsync_registered_users', JSON.stringify(registeredUsers));
+            
+            showToast('Account created! Now you can Log In.', 'success');
+            
+            // Auto-fill login email for convenience and switch tab
+            document.getElementById('login-email').value = email;
+            switchAuthTab('login');
         } else {
             showToast('Please fill all fields', 'error');
         }
