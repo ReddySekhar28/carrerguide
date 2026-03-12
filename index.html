@@ -101,7 +101,8 @@
                     </div>
 
                     <!-- Login Form -->
-                    <form id="form-login" class="auth-form hidden" onsubmit="handleAuth(event, 'login')">
+                    <form id="form-login" class="auth-form" onsubmit="handleAuth(event, 'login')">
+                        <p class="text-sm text-secondary mb-2">Welcome back! Enter your email and password to continue tracking your career progress.</p>
                         <div class="input-group">
                             <i class="fa-solid fa-envelope"></i>
                             <input type="email" id="login-email" placeholder="Email Address" required>
@@ -118,6 +119,7 @@
 
                     <!-- Sign In (Registration) Form -->
                     <form id="form-signup" class="auth-form active" onsubmit="handleAuth(event, 'signup')">
+                        <p class="text-sm text-secondary mb-2">New here? Sign In with your details to start analyzing your technical skills today.</p>
                         <div class="input-group">
                             <i class="fa-solid fa-user"></i>
                             <input type="text" id="signup-name" placeholder="Full Name" required>
