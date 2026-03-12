@@ -95,8 +95,8 @@ function navigateTo(viewName, subTab = null) {
         views[viewName].classList.add('active');
         
         // Handle sub-tabs for auth
-        if (viewName === 'auth' && subTab) {
-            switchAuthTab(subTab);
+        if (viewName === 'auth') {
+            switchAuthTab(subTab || 'signup');
         }
 
         // Trigger specific view initializations

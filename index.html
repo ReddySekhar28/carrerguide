@@ -55,7 +55,7 @@
                 <div class="logo">Skill Career <span class="highlight-text">Mentor</span></div>
                 <div class="nav-links">
                     <button class="btn-secondary" onclick="navigateTo('auth', 'login')">Log In</button>
-                    <button class="btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;" onclick="navigateTo('auth', 'signup')">Sign Up</button>
+                    <button class="btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;" onclick="navigateTo('auth', 'signup')">Sign In</button>
                 </div>
             </nav>
             <div class="landing-hero">
@@ -94,14 +94,14 @@
                         <p class="text-secondary">AI-driven insights to crack your dream job.</p>
                     </div>
 
-                    <!-- Tabs for Login / Signup -->
+                    <!-- Tabs for Login / Sign In -->
                     <div class="auth-tabs">
-                        <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Log In</button>
-                        <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+                        <button class="auth-tab" id="tab-login" onclick="switchAuthTab('login')">Log In</button>
+                        <button class="auth-tab active" id="tab-signup" onclick="switchAuthTab('signup')">Sign In</button>
                     </div>
 
                     <!-- Login Form -->
-                    <form id="form-login" class="auth-form active" onsubmit="handleAuth(event, 'login')">
+                    <form id="form-login" class="auth-form hidden" onsubmit="handleAuth(event, 'login')">
                         <div class="input-group">
                             <i class="fa-solid fa-envelope"></i>
                             <input type="email" id="login-email" placeholder="Email Address" required>
@@ -110,11 +110,11 @@
                             <i class="fa-solid fa-lock"></i>
                             <input type="password" id="login-password" placeholder="Password" required>
                         </div>
-                        <button type="submit" class="btn-primary">Log In</button>
+                        <button type="submit" class="btn-primary">Continue to Dashboard</button>
                     </form>
 
-                    <!-- Signup Form -->
-                    <form id="form-signup" class="auth-form hidden" onsubmit="handleAuth(event, 'signup')">
+                    <!-- Sign In (Registration) Form -->
+                    <form id="form-signup" class="auth-form active" onsubmit="handleAuth(event, 'signup')">
                         <div class="input-group">
                             <i class="fa-solid fa-user"></i>
                             <input type="text" id="signup-name" placeholder="Full Name" required>
@@ -127,7 +127,7 @@
                             <i class="fa-solid fa-lock"></i>
                             <input type="password" id="signup-password" placeholder="Create Password" required>
                         </div>
-                        <button type="submit" class="btn-primary">Create Account</button>
+                        <button type="submit" class="btn-primary">Sign In & Get Results</button>
                     </form>
 
                 </div>
