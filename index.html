@@ -312,48 +312,50 @@
                     <p id="prospects-role-title">For your target role</p>
                 </div>
 
-                <div class="insights-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                <div class="insights-grid">
                     
+                    <!-- Market Context -->
                     <div class="card glass-panel insight-card-large">
-                        <i class="fa-solid fa-arrow-trend-up fa-2x text-accent mb-1"></i>
+                        <i class="fa-solid fa-arrow-trend-up text-accent"></i>
                         <h4 class="text-secondary text-uppercase tracking-wide">Future Trend & Scope</h4>
                         <div class="insight-value-large mt-1" id="prospect-scope">--</div>
                     </div>
 
                     <div class="card glass-panel insight-card-large">
-                        <i class="fa-solid fa-indian-rupee-sign fa-2x text-warning mb-1"></i>
+                        <i class="fa-solid fa-indian-rupee-sign text-warning"></i>
                         <h4 class="text-secondary text-uppercase tracking-wide">Average / Fresher Salary</h4>
                         <div class="insight-value-large text-warning mt-1" id="prospect-avg">--</div>
                         <p class="text-secondary mt-1 text-sm">per year in INR</p>
                     </div>
 
                     <div class="card glass-panel insight-card-large">
-                        <i class="fa-solid fa-sack-dollar fa-2x text-success mb-1"></i>
+                        <i class="fa-solid fa-sack-dollar text-success"></i>
                         <h4 class="text-secondary text-uppercase tracking-wide">Max Career Potential</h4>
                         <div class="insight-value-large text-success mt-1" id="prospect-max">--</div>
                         <p class="text-secondary mt-1 text-sm">per year in INR</p>
                     </div>
 
-                    <div class="card glass-panel insight-card-large" style="grid-column: 1 / -1;">
-                        <i class="fa-solid fa-building fa-2x text-primary mb-1"></i>
-                        <h4 class="text-secondary text-uppercase tracking-wide">Famous Companies Hiring</h4>
-                        <div class="mt-2" id="prospect-companies" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
-
+                    <!-- Expert Insights -->
                     <div class="card glass-panel insight-card-large">
-                        <i class="fa-solid fa-bolt fa-2x text-warning mb-1"></i>
+                        <i class="fa-solid fa-bolt text-warning"></i>
                         <h4 class="text-secondary text-uppercase tracking-wide">Trending Real-Time Skills</h4>
-                        <div class="mt-2 text-sm" id="prospect-trends" style="display: flex; flex-direction: column; gap: 0.5rem; text-align: left;">
+                        <div class="mt-1 text-sm" id="prospect-trends" style="display: flex; flex-direction: column; gap: 0.75rem; text-align: left; width: 100%;">
                             <!-- Populated by JS -->
                         </div>
                     </div>
 
                     <div class="card glass-panel insight-card-large">
-                        <i class="fa-solid fa-lightbulb fa-2x text-success mb-1"></i>
+                        <i class="fa-solid fa-lightbulb text-success"></i>
                         <h4 class="text-secondary text-uppercase tracking-wide">Expert Growth Tips</h4>
-                        <div class="mt-2 text-sm" id="prospect-tips" style="display: flex; flex-direction: column; gap: 0.5rem; text-align: left;">
+                        <div class="mt-1 text-sm" id="prospect-tips" style="display: flex; flex-direction: column; gap: 0.75rem; text-align: left; width: 100%;">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="card glass-panel insight-card-large card-full-width">
+                        <i class="fa-solid fa-building text-primary"></i>
+                        <h4 class="text-secondary text-uppercase tracking-wide">Famous Companies Hiring</h4>
+                        <div class="mt-2" id="prospect-companies" style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; width: 100%;">
                             <!-- Populated by JS -->
                         </div>
                     </div>

@@ -601,7 +601,7 @@ function goToProspects() {
         companiesContainer.innerHTML = '';
         if (role.marketInsights.topCompanies) {
             role.marketInsights.topCompanies.forEach(company => {
-                companiesContainer.innerHTML += `<div class="company-pill" style="background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 20px; border: 1px solid var(--glass-border); font-size: 0.9rem;">${company}</div>`;
+                companiesContainer.innerHTML += `<div class="company-pill">${company}</div>`;
             });
         }
     }
