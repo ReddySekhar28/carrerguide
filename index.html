@@ -51,11 +51,18 @@
 
         <!-- LANDING PAGE VIEW -->
         <section id="view-landing" class="view active">
+            <nav class="navbar glass-panel">
+                <div class="logo">Skill Career <span class="highlight-text">Mentor</span></div>
+                <div class="nav-links">
+                    <button class="btn-secondary" onclick="navigateTo('auth', 'login')">Log In</button>
+                    <button class="btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;" onclick="navigateTo('auth', 'signup')">Sign Up</button>
+                </div>
+            </nav>
             <div class="landing-hero">
                 <div class="hero-content">
                     <h1 class="hero-title"><span class="gradient-text">Scale Your Career</span><br>with AI Precision</h1>
                     <p class="hero-subtitle text-secondary">The all-in-one platform for B.Tech CSE students to bridge skill gaps and land dream roles.</p>
-                    <button class="btn-primary hero-btn" onclick="navigateTo('auth')">Launch Your Career <i class="fa-solid fa-rocket"></i></button>
+                    <button class="btn-primary hero-btn" onclick="navigateTo('auth', 'login')">Launch Your Career <i class="fa-solid fa-rocket"></i></button>
                 </div>
 
                 <div class="features-grid mt-4">

@@ -71,7 +71,7 @@ function showToast(message, type = 'info') {
     }, 3000);
 }
 
-function navigateTo(viewName) {
+function navigateTo(viewName, subTab = null) {
     // Progress tracker visibility
     const progress = document.getElementById('global-progress');
     if (viewName === 'auth' || viewName === 'landing') {
@@ -94,6 +94,11 @@ function navigateTo(viewName) {
         views[viewName].classList.remove('hidden');
         views[viewName].classList.add('active');
         
+        // Handle sub-tabs for auth
+        if (viewName === 'auth' && subTab) {
+            switchAuthTab(subTab);
+        }
+
         // Trigger specific view initializations
         if (viewName === 'dashboard') {
             initDashboard();
