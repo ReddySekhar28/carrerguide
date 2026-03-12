@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Career Mentor - AI Path Finder</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="bg-glow orb-1"></div>
+    <div class="bg-glow orb-2"></div>
+    <div class="bg-glow orb-3"></div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- MAIN CONTAINER -->
+    <main id="app-container">
+        <!-- GLOBAL PROGRESS TRACKER -->
+        <div id="global-progress" class="progress-bar-container hidden">
+            <div class="progress-step active clickable" data-step="dashboard" onclick="navigateTo('dashboard')">
+                <span class="step-num">1</span>
+                <span class="step-label">Dashboard</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step clickable" data-step="match" onclick="goToMatch()">
+                <span class="step-num">2</span>
+                <span class="step-label">Analysis</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step clickable" data-step="resources" onclick="goToResources()">
+                <span class="step-num">3</span>
+                <span class="step-label">Roadmap</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step clickable" data-step="prospects" onclick="goToProspects()">
+                <span class="step-num">4</span>
+                <span class="step-label">Prospects</span>
+            </div>
+        </div>
+
+        <!-- AUTHENTICATION VIEW -->
+        <section id="view-auth" class="view active">
+            <div class="auth-wrapper">
+                <div class="auth-card glass-panel">
+                    <div class="auth-header">
+                        <h1 class="gradient-text">Skill Career Mentor</h1>
+                        <p class="text-secondary">AI-driven insights to crack your dream job.</p>
+                    </div>
+
+                    <!-- Tabs for Login / Signup -->
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Log In</button>
+                        <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="form-login" class="auth-form active" onsubmit="handleAuth(event, 'login')">
+                        <div class="input-group">
+                            <i class="fa-solid fa-envelope"></i>
+                            <input type="email" id="login-email" placeholder="Email Address" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="login-password" placeholder="Password" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Log In</button>
+                    </form>
+
+                    <!-- Signup Form -->
+                    <form id="form-signup" class="auth-form hidden" onsubmit="handleAuth(event, 'signup')">
+                        <div class="input-group">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="signup-name" placeholder="Full Name" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fa-solid fa-envelope"></i>
+                            <input type="email" id="signup-email" placeholder="Email Address" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="signup-password" placeholder="Create Password" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Create Account</button>
+                    </form>
+
+                    <div class="auth-divider">
+                        <span>OR</span>
+                    </div>
+
+                    <!-- Google SSO Button -->
+                    <button class="btn-google" onclick="handleGoogleSignIn()">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" class="google-icon">
+                        Sign in with Google
+                    </button>
+                </div>
+
+                <!-- Decoration elements for aesthetic -->
+                <div class="blob blob-1"></div>
+                <div class="blob blob-2"></div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD VIEW -->
+        <section id="view-dashboard" class="view hidden">
+            <nav class="navbar glass-panel">
+                <div class="logo">Skill Career <span class="highlight-text">Mentor</span></div>
+                <div class="user-info">
+                    <span id="nav-user-name">User</span>
+                    <button class="btn-logout" onclick="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+                </div>
+            </nav>
+
+            <div class="dashboard-container">
+                <header class="dashboard-header">
+                    <h2>Select Your <span class="highlight-text">Skills</span></h2>
+                    <p>Click on the skills you know to add them to your profile.</p>
+                </header>
+
+                <div class="dashboard-grid single-col">
+                    <!-- Top: Available Skills -->
+                    <div class="card glass-panel skills-panel">
+                        <h3><i class="fa-solid fa-list text-accent"></i> Available Skills</h3>
+                        <p class="text-secondary mb-1">Click on the skills you want to learn or already know.</p>
+                        <div id="skills-grid" class="skills-grid-container">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Middle: Learned Skills -->
+                    <div class="card glass-panel profile-panel">
+                        <h3><i class="fa-solid fa-user-check text-success"></i> Your Learned Skills</h3>
+                        <div id="learned-skills-list" class="skills-grid-container" style="min-height: 50px;">
+                            <p class="empty-state w-100">No skills added yet.</p>
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Bottom: Target Job Role -->
+                    <div class="card glass-panel profile-panel">
+                        <h3><i class="fa-solid fa-bullseye text-accent"></i> Future Job Goal</h3>
+                        <p class="text-secondary mb-1">Select your desired career path.</p>
+                        <div class="job-selector">
+                            <div class="custom-select">
+                                <select id="job-role" onchange="handleJobRoleChange()">
+                                    <option value="" disabled selected>-- Choose a Role --</option>
+                                    <!-- Populated by JS -->
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-icon"></i>
+                            </div>
+                        </div>
+
+                        <button id="start-career-btn" class="btn-primary w-100 disabled" onclick="goToMatch()" style="margin-top: 1rem;">Submit & Analyze Match <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proficiency Modal -->
+            <div id="proficiency-modal" class="modal">
+                <div class="modal-content glass-panel">
+                    <h3 id="modal-skill-name">Skill Name</h3>
+                    <p>What is your proficiency level?</p>
+                    <div class="level-buttons">
+                        <button class="btn-level beginner" onclick="selectProficiency('Beginner')">
+                            <i class="fa-solid fa-seedling"></i> Beginner
+                        </button>
+                        <button class="btn-level moderate" onclick="selectProficiency('Moderate')">
+                            <i class="fa-solid fa-tree"></i> Moderate
+                        </button>
+                        <button class="btn-level advanced" onclick="selectProficiency('Advanced')">
+                            <i class="fa-solid fa-fire"></i> Advanced
+                        </button>
+                    </div>
+                    <button class="btn-close" onclick="closeModal()">Cancel</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: MATCH VIEW -->
+        <section id="view-match" class="view hidden">
+            <nav class="navbar glass-panel">
+                <div class="logo">Skill Career <span class="highlight-text">Mentor</span></div>
+                <button class="btn-secondary" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
+            </nav>
+
+            <div class="results-container">
+                <div class="results-header">
+                    <h2>Career Match <span class="highlight-text">Analysis</span></h2>
+                    <p id="match-role-title">Analyzing role...</p>
+                </div>
+
+                <div class="results-grid single-col">
+                    <div class="score-card glass-panel" style="justify-content: center; text-align: center; flex-direction: column;">
+                        <h3>Your Current Match Score</h3>
+                        <p class="text-secondary">Based on the required skills vs your learned skills</p>
+                        <div class="score-circle mt-2 mb-2">
+                            <svg viewBox="0 0 36 36" class="circular-chart">
+                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path id="score-path" class="circle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <text x="18" y="20.35" class="percentage" id="match-score-text">0%</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="card glass-panel mt-2">
+                        <h3><i class="fa-solid fa-triangle-exclamation text-warning"></i> Skill Gaps Identified</h3>
+                        <p class="text-secondary mb-1">These are the skills you need to learn or improve for this role.</p>
+                        <div id="match-missing-skills" class="missing-skills-list">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <div class="action-footer mt-2" style="display: flex; justify-content: flex-end;">
+                        <button class="btn-primary" onclick="goToResources()">View Learning Resources <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: RESOURCES & SIMULATOR VIEW -->
+        <section id="view-resources" class="view hidden">
+            <nav class="navbar glass-panel">
+                <div class="logo">Skill Career <span class="highlight-text">Mentor</span></div>
+                <button class="btn-secondary" onclick="navigateTo('match')"><i class="fa-solid fa-arrow-left"></i> Back to Match</button>
+            </nav>
+
+            <div class="results-container">
+                <div class="results-header">
+                    <h2>Learning <span class="highlight-text">Resources & Simulator</span></h2>
+                    <p id="resources-subtitle">Select the skills you plan to study to see how your Match Score improves!</p>
+                </div>
+
+                <div class="simulator-grid" style="display: grid; grid-template-columns: 1fr 350px; gap: 2rem;">
+                    <div class="card glass-panel">
+                        <h3><i class="fa-solid fa-book-open text-accent"></i> Free Learning Sources</h3>
+                        <div id="resources-list" class="resources-list-container">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="card glass-panel sticky-panel" style="position: sticky; top: 100px; height: fit-content;">
+                        <h3><i class="fa-solid fa-flask text-success"></i> Score Simulator</h3>
+                        <div class="sim-score-display text-center my-2">
+                            <span class="text-secondary">Predicted Match Score</span>
+                            <div class="sim-percentage highlight-text" id="sim-score-text">0%</div>
+                            <div class="sim-increase text-success" id="sim-increase-text">+0% Increase</div>
+                        </div>
+                        <p class="text-secondary" style="font-size: 0.85rem; text-align: center;">Check off the resources on the left that you commit to learning.</p>
+                        
+                        <div class="divider"></div>
+                        <div class="sim-actions" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <button class="btn-primary w-100" onclick="goToProspects()">View Career Prospects <i class="fa-solid fa-arrow-right"></i></button>
+                            <button class="btn-secondary w-100" onclick="exportRoadmap()"><i class="fa-solid fa-download"></i> Download My Roadmap</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: PROSPEcripts VIEW -->
+        <section id="view-prospects" class="view hidden">
+            <nav class="navbar glass-panel">
+                <div class="logo">Skill Career <span class="highlight-text">Mentor</span></div>
+                <button class="btn-secondary" onclick="navigateTo('resources')"><i class="fa-solid fa-arrow-left"></i> Back to Resources</button>
+            </nav>
+
+            <div class="results-container text-center">
+                <div class="results-header">
+                    <h2>Future <span class="highlight-text">Career Prospects</span></h2>
+                    <p id="prospects-role-title">For your target role</p>
+                </div>
+
+                <div class="insights-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                    
+                    <div class="card glass-panel insight-card-large">
+                        <i class="fa-solid fa-arrow-trend-up fa-2x text-accent mb-1"></i>
+                        <h4 class="text-secondary text-uppercase tracking-wide">Future Trend & Scope</h4>
+                        <div class="insight-value-large mt-1" id="prospect-scope">--</div>
+                    </div>
+
+                    <div class="card glass-panel insight-card-large">
+                        <i class="fa-solid fa-indian-rupee-sign fa-2x text-warning mb-1"></i>
+                        <h4 class="text-secondary text-uppercase tracking-wide">Average / Fresher Salary</h4>
+                        <div class="insight-value-large text-warning mt-1" id="prospect-avg">--</div>
+                        <p class="text-secondary mt-1 text-sm">per year in INR</p>
+                    </div>
+
+                    <div class="card glass-panel insight-card-large">
+                        <i class="fa-solid fa-sack-dollar fa-2x text-success mb-1"></i>
+                        <h4 class="text-secondary text-uppercase tracking-wide">Max Career Potential</h4>
+                        <div class="insight-value-large text-success mt-1" id="prospect-max">--</div>
+                        <p class="text-secondary mt-1 text-sm">per year in INR</p>
+                    </div>
+
+                    <div class="card glass-panel insight-card-large" style="grid-column: 1 / -1;">
+                        <i class="fa-solid fa-building fa-2x text-primary mb-1"></i>
+                        <h4 class="text-secondary text-uppercase tracking-wide">Famous Companies Hiring</h4>
+                        <div class="mt-2" id="prospect-companies" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="card glass-panel insight-card-large">
+                        <i class="fa-solid fa-bolt fa-2x text-warning mb-1"></i>
+                        <h4 class="text-secondary text-uppercase tracking-wide">Trending Real-Time Skills</h4>
+                        <div class="mt-2 text-sm" id="prospect-trends" style="display: flex; flex-direction: column; gap: 0.5rem; text-align: left;">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="card glass-panel insight-card-large">
+                        <i class="fa-solid fa-lightbulb fa-2x text-success mb-1"></i>
+                        <h4 class="text-secondary text-uppercase tracking-wide">Expert Growth Tips</h4>
+                        <div class="mt-2 text-sm" id="prospect-tips" style="display: flex; flex-direction: column; gap: 0.5rem; text-align: left;">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-2 text-center" style="margin-top: 4rem;">
+                    <button class="btn-secondary" onclick="navigateTo('dashboard')">Start Over</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Data & Application Logic -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
