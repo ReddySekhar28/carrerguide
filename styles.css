@@ -131,6 +131,92 @@ h1, h2, h3, h4, .auth-tab, .btn-primary {
 .hidden { display: none !important; }
 
 /* Progress Tracker */
+/* =========================================
+   LANDING HERO SECTION
+========================================= */
+.landing-hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+.hero-content {
+    max-width: 900px;
+    z-index: 2;
+    margin-bottom: 4rem;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    line-height: 1.1;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-heading);
+}
+
+.hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    max-width: 650px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.6;
+}
+
+.hero-btn {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.25rem;
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+    z-index: 2;
+}
+
+.feature-card {
+    padding: 2.5rem 2rem;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent-primary);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.feature-card i {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.feature-card h4 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+/* Global Progress Tracker Tweaks */
 .progress-bar-container {
     display: flex;
     justify-content: center;
@@ -368,52 +454,11 @@ h1, h2, h3, h4, .auth-tab, .btn-primary {
     box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
 }
 
-.auth-divider {
-    margin: 2rem 0;
-    display: flex;
-    align-items: center;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-}
 
-.auth-divider::before, .auth-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--glass-border);
-}
 
-.auth-divider span {
-    padding: 0 1rem;
-}
 
-.btn-google {
-    width: 100%;
-    padding: 1rem;
-    background: rgba(0, 0, 0, 0.3);
-    color: var(--text-primary);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.75rem;
-    transition: all 0.3s ease;
-}
 
-.btn-google:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(255, 255, 255, 0.05);
-}
 
-.google-icon {
-    width: 20px;
-    height: 20px;
-}
 
 /* Toast Notification */
 .toast {

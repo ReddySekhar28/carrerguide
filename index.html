@@ -49,8 +49,37 @@
             </div>
         </div>
 
+        <!-- LANDING PAGE VIEW -->
+        <section id="view-landing" class="view active">
+            <div class="landing-hero">
+                <div class="hero-content">
+                    <h1 class="hero-title"><span class="gradient-text">Scale Your Career</span><br>with AI Precision</h1>
+                    <p class="hero-subtitle text-secondary">The all-in-one platform for B.Tech CSE students to bridge skill gaps and land dream roles.</p>
+                    <button class="btn-primary hero-btn" onclick="navigateTo('auth')">Launch Your Career <i class="fa-solid fa-rocket"></i></button>
+                </div>
+
+                <div class="features-grid mt-4">
+                    <div class="card glass-panel feature-card">
+                        <i class="fa-solid fa-brain fa-2x text-accent mb-1"></i>
+                        <h4>AI Match Score</h4>
+                        <p class="text-sm text-secondary">Real-time analysis of your skills against industry-leading job roles.</p>
+                    </div>
+                    <div class="card glass-panel feature-card">
+                        <i class="fa-solid fa-map-location-dot fa-2x text-warning mb-1"></i>
+                        <h4>Personalized Roadmaps</h4>
+                        <p class="text-sm text-secondary">Step-by-step learning paths with direct resources to bridge every gap.</p>
+                    </div>
+                    <div class="card glass-panel feature-card">
+                        <i class="fa-solid fa-chart-line fa-2x text-success mb-1"></i>
+                        <h4>Market Insights</h4>
+                        <p class="text-sm text-secondary">Salary data, future trends, and top hiring companies at your fingertips.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- AUTHENTICATION VIEW -->
-        <section id="view-auth" class="view active">
+        <section id="view-auth" class="view hidden">
             <div class="auth-wrapper">
                 <div class="auth-card glass-panel">
                     <div class="auth-header">
@@ -94,15 +123,6 @@
                         <button type="submit" class="btn-primary">Create Account</button>
                     </form>
 
-                    <div class="auth-divider">
-                        <span>OR</span>
-                    </div>
-
-                    <!-- Google SSO Button -->
-                    <button class="btn-google" onclick="handleGoogleSignIn()">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo" class="google-icon">
-                        Sign in with Google
-                    </button>
                 </div>
 
                 <!-- Decoration elements for aesthetic -->

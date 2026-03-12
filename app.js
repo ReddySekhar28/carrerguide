@@ -3,6 +3,7 @@ let currentUser = null;
 
 // DOM Elements
 const views = {
+    landing: document.getElementById('view-landing'),
     auth: document.getElementById('view-auth'),
     dashboard: document.getElementById('view-dashboard'),
     match: document.getElementById('view-match'),
@@ -19,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (storedUser) {
         currentUser = JSON.parse(storedUser);
         navigateTo('dashboard');
+    } else {
+        navigateTo('landing');
     }
 });
 
@@ -71,7 +74,7 @@ function showToast(message, type = 'info') {
 function navigateTo(viewName) {
     // Progress tracker visibility
     const progress = document.getElementById('global-progress');
-    if (viewName === 'auth') {
+    if (viewName === 'auth' || viewName === 'landing') {
         progress.classList.add('hidden');
     } else {
         progress.classList.remove('hidden');
@@ -142,17 +145,7 @@ function handleAuth(event, type) {
     }
 }
 
-function handleGoogleSignIn() {
-    // Mocking Google Sign In
-    showToast('Redirecting to Google...', 'info');
-    setTimeout(() => {
-        proceedWithLogin({ 
-            email: 'user@gmail.com', 
-            name: 'Demo User',
-            type: 'google'
-        });
-    }, 1000);
-}
+
 
 function proceedWithLogin(userProfile) {
     currentUser = {
@@ -169,7 +162,7 @@ function proceedWithLogin(userProfile) {
 function logout() {
     currentUser = null;
     localStorage.removeItem('skillsync_user');
-    navigateTo('auth');
+    navigateTo('landing');
     showToast('Logged out successfully', 'info');
 }
 
