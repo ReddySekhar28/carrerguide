@@ -62,7 +62,7 @@
                 <div class="hero-content">
                     <h1 class="hero-title"><span class="gradient-text">Scale Your Career</span><br>with AI Precision</h1>
                     <p class="hero-subtitle text-secondary">The all-in-one platform for B.Tech CSE students to bridge skill gaps and land dream roles.</p>
-                    <button class="btn-primary hero-btn" onclick="navigateTo('auth', 'login')">Launch Your Career <i class="fa-solid fa-rocket"></i></button>
+                    <button class="btn-primary hero-btn" onclick="navigateTo('auth', 'signup')">Launch Your Career <i class="fa-solid fa-rocket"></i></button>
                 </div>
 
                 <div class="features-grid mt-4">
@@ -110,7 +110,10 @@
                             <i class="fa-solid fa-lock"></i>
                             <input type="password" id="login-password" placeholder="Password" required>
                         </div>
-                        <button type="submit" class="btn-primary">Continue to Dashboard</button>
+                        <button type="submit" class="btn-primary">Log In to Your Profile</button>
+                        <div class="mt-2 text-center">
+                            <a href="#" class="text-sm text-secondary" style="text-decoration: none;" onclick="showToast('Password reset link sent to your email!', 'info')">Forgot Password?</a>
+                        </div>
                     </form>
 
                     <!-- Sign In (Registration) Form -->
