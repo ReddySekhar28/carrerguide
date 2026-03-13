@@ -162,10 +162,33 @@
                 <div class="dashboard-grid single-col">
                     <!-- Top: Available Skills -->
                     <div class="card glass-panel skills-panel">
-                        <h3><i class="fa-solid fa-list text-accent"></i> Available Skills</h3>
-                        <p class="text-secondary mb-1">Click on the skills you want to learn or already know.</p>
-                        <div id="skills-grid" class="skills-grid-container">
+                        <h3><i class="fa-solid fa-list text-accent"></i> Technical Skill Evaluation</h3>
+                        <p class="text-secondary mb-1">Select your skills from each category to build your profile.</p>
+                        <div id="skills-grid" class="skills-grid-wrapper">
+                            <!-- Populated by JSByCategory -->
+                        </div>
+                    </div>
+
+                    <!-- New: Projects Completed -->
+                    <div class="card glass-panel projects-panel">
+                        <h3><i class="fa-solid fa-diagram-project text-warning"></i> Practical Projects</h3>
+                        <p class="text-secondary mb-1">Select pre-defined projects or add your own custom ones.</p>
+                        
+                        <!-- Custom Project Input -->
+                        <div class="custom-project-input mt-1 mb-2">
+                            <div class="input-group">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                <input type="text" id="new-project-name" placeholder="Enter your custom project name...">
+                                <button class="btn-add-project" onclick="addCustomProject()">Add Project</button>
+                            </div>
+                        </div>
+
+                        <div id="projects-grid" class="projects-grid-container">
                             <!-- Populated by JS -->
+                        </div>
+                        
+                        <div id="custom-projects-grid" class="projects-grid-container mt-2">
+                            <!-- Populated with user-added projects -->
                         </div>
                     </div>
 
@@ -206,8 +229,8 @@
                         <button class="btn-level beginner" onclick="selectProficiency('Beginner')">
                             <i class="fa-solid fa-seedling"></i> Beginner
                         </button>
-                        <button class="btn-level moderate" onclick="selectProficiency('Moderate')">
-                            <i class="fa-solid fa-tree"></i> Moderate
+                        <button class="btn-level moderate" onclick="selectProficiency('Intermediate')">
+                            <i class="fa-solid fa-tree"></i> Intermediate
                         </button>
                         <button class="btn-level advanced" onclick="selectProficiency('Advanced')">
                             <i class="fa-solid fa-fire"></i> Advanced
@@ -359,6 +382,24 @@
                             <!-- Populated by JS -->
                         </div>
                     </div>
+
+                    <!-- NEW: Detailed Learning Summary -->
+                    <div class="card glass-panel summary-card card-half-width">
+                        <h4><i class="fa-solid fa-graduation-cap"></i> Summary of Learned Content</h4>
+                        <p class="text-secondary text-sm mb-2">A record of your current expertise levels.</p>
+                        <div id="summary-learned-list" class="summary-list">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="card glass-panel summary-card card-half-width">
+                        <h4><i class="fa-solid fa-bullseye"></i> Desired Learning Outcomes</h4>
+                        <p class="text-secondary text-sm mb-2">Your roadmap goals for the <span id="summary-role-name">Target</span> role.</p>
+                        <ul id="summary-outcomes-list" class="summary-list">
+                            <!-- Populated by JS -->
+                        </ul>
+                    </div>
+
                 </div>
                 
                 <div class="mt-2 text-center" style="margin-top: 4rem;">

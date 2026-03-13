@@ -19,7 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const storedUser = localStorage.getItem('skillsync_user');
     if (storedUser) {
         currentUser = JSON.parse(storedUser);
+        if (!currentUser.customProjects) currentUser.customProjects = [];
+        if (!currentUser.completedProjects) currentUser.completedProjects = [];
         navigateTo('dashboard');
+        initDashboard();
     } else {
         navigateTo('landing');
     }
@@ -181,8 +184,10 @@ function handleAuth(event, type) {
 function proceedWithLogin(userProfile) {
     currentUser = {
         ...userProfile,
-        learnedSkills: {}, // Stores skillId -> proficiency ("Beginner" | "Moderate" | "Advanced")
-        selectedJobId: null
+        learnedSkills: {}, // Stores skillId -> proficiency ("Beginner" | "Intermediate" | "Advanced")
+        selectedJobId: null,
+        completedProjects: [], // Predefined project IDs
+        customProjects: [] // Array of { id, name }
     };
     
     localStorage.setItem('skillsync_user', JSON.stringify(currentUser));
@@ -204,7 +209,12 @@ function initDashboard() {
     // Set user info
     document.getElementById('nav-user-name').textContent = currentUser.name;
     
+    // Ensure project storage exists
+    if (!currentUser.completedProjects) currentUser.completedProjects = [];
+    if (!currentUser.customProjects) currentUser.customProjects = [];
+
     renderSkillsGrid();
+    renderProjectsGrid(); 
     renderLearnedSkills();
     populateJobRoles();
     checkStartButtonState();
@@ -214,24 +224,140 @@ function renderSkillsGrid() {
     const grid = document.getElementById('skills-grid');
     grid.innerHTML = '';
 
+    // Group skills by category
+    const grouped = {};
     APP_DATA.skills.forEach(skill => {
-        const level = currentUser.learnedSkills[skill.id]; // Might be undefined
-        
-        const btn = document.createElement('button');
-        let className = 'skill-btn';
-        if (level) {
-            className += ` selected badge-${level.toLowerCase()}`;
-        }
-        btn.className = className;
-        
-        btn.innerHTML = `
-            ${skill.name}
-            ${level ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-plus"></i>'}
-        `;
-        
-        btn.onclick = () => openProficiencyModal(skill.id);
-        grid.appendChild(btn);
+        if (!grouped[skill.category]) grouped[skill.category] = [];
+        grouped[skill.category].push(skill);
     });
+
+    // Render each category
+    for (const [category, skills] of Object.entries(grouped)) {
+        const catSection = document.createElement('div');
+        catSection.className = 'skill-category-section';
+        catSection.innerHTML = `<h4 class="category-title">${category}</h4>`;
+        
+        const catGrid = document.createElement('div');
+        catGrid.className = 'category-skills-grid';
+
+        skills.forEach(skill => {
+            const level = currentUser.learnedSkills[skill.id];
+            const btn = document.createElement('button');
+            let className = 'skill-btn';
+            if (level) {
+                className += ` selected badge-${level.toLowerCase()}`;
+            }
+            btn.className = className;
+            btn.innerHTML = `
+                ${skill.name}
+                ${level ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-plus"></i>'}
+            `;
+            btn.onclick = () => openProficiencyModal(skill.id);
+            catGrid.appendChild(btn);
+        });
+        
+        catSection.appendChild(catGrid);
+        grid.appendChild(catSection);
+    }
+}
+
+function renderProjectsGrid() {
+    const grid = document.getElementById('projects-grid');
+    const customGrid = document.getElementById('custom-projects-grid');
+    
+    if (grid) {
+        grid.innerHTML = '';
+        APP_DATA.projects.forEach(proj => {
+            const isCompleted = currentUser.completedProjects.includes(proj.id);
+            const card = document.createElement('div');
+            card.className = `project-card ${isCompleted ? 'active' : ''}`;
+            card.innerHTML = `
+                <div class="project-info">
+                    <strong>${proj.name}</strong>
+                    <p>${proj.description}</p>
+                </div>
+                <div class="project-check">
+                    <i class="fa-solid ${isCompleted ? 'fa-circle-check' : 'fa-circle'}"></i>
+                </div>
+            `;
+            card.onclick = () => toggleProject(proj.id);
+            grid.appendChild(card);
+        });
+    }
+
+    if (customGrid) {
+        customGrid.innerHTML = '';
+        if (currentUser.customProjects.length > 0) {
+            const title = document.createElement('h4');
+            title.className = 'w-100 mb-1';
+            title.style.fontSize = '0.9rem';
+            title.style.color = 'var(--text-secondary)';
+            title.textContent = 'Your Custom Projects';
+            customGrid.appendChild(title);
+        }
+
+        currentUser.customProjects.forEach(proj => {
+            const card = document.createElement('div');
+            card.className = 'project-card active custom-project-card';
+            card.innerHTML = `
+                <div class="project-info">
+                    <strong>${proj.name}</strong>
+                    <p>Self-identified custom project</p>
+                </div>
+                <div class="project-actions">
+                    <button class="btn-delete-project" onclick="deleteCustomProject('${proj.id}', event)">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            `;
+            customGrid.appendChild(card);
+        });
+    }
+}
+
+function addCustomProject() {
+    const input = document.getElementById('new-project-name');
+    const name = input.value.trim();
+    
+    if (!name) {
+        showToast('Please enter a project name', 'error');
+        return;
+    }
+
+    const newProj = {
+        id: 'cp_' + Date.now(),
+        name: name
+    };
+
+    if (!currentUser.customProjects) currentUser.customProjects = [];
+    currentUser.customProjects.push(newProj);
+    
+    input.value = '';
+    saveUser();
+    renderProjectsGrid();
+    showToast(`Project "${name}" added!`, 'success');
+}
+
+function deleteCustomProject(id, event) {
+    event.stopPropagation();
+    currentUser.customProjects = currentUser.customProjects.filter(p => p.id !== id);
+    saveUser();
+    renderProjectsGrid();
+    showToast('Project removed', 'info');
+}
+
+function toggleProject(projId) {
+    if (!currentUser.completedProjects) currentUser.completedProjects = [];
+    
+    const index = currentUser.completedProjects.indexOf(projId);
+    if (index > -1) {
+        currentUser.completedProjects.splice(index, 1);
+    } else {
+        currentUser.completedProjects.push(projId);
+    }
+    saveUser();
+    renderProjectsGrid();
+    showToast('Projects updated!', 'info');
 }
 
 function renderLearnedSkills() {
@@ -346,7 +472,7 @@ function saveUser() {
 }
 
 // --- Career Analysis & Results ---
-const LEVEL_VALUES = { 'Beginner': 1, 'Moderate': 2, 'Advanced': 3 };
+const LEVEL_VALUES = { 'Beginner': 1, 'Intermediate': 2, 'Advanced': 3 };
 
 // --- Multi-Page Nav & Logic ---
 let currentMissingSkills = [];
@@ -386,14 +512,41 @@ function calculateAndRenderMatch() {
                 skillId: skillId,
                 current: userLevel || 'None',
                 target: requiredLevel,
-                gapValue: targetVal - userVal // How much score they miss out on
+                gapValue: targetVal - userVal 
             });
         }
     }
 
-    // Calculate Base Percentage
-    currentUser.baseMatchScore = Math.round((userEarnedScore / totalRequiredScore) * 100);
+    // Projects weighting
+    let projectScore = 0;
+    let requiredProjectIds = role.requiredProjects || [];
+    let targetProjectScore = requiredProjectIds.length;
+    
+    // User points from pre-defined projects
+    currentUser.completedProjects.forEach(pid => {
+        if (requiredProjectIds.includes(pid)) projectScore++;
+    });
+
+    // Custom projects bonus: Each custom project gives a partial boost 
+    // (let's say up to 2 custom projects can fulfill missing required projects points)
+    let customBonus = currentUser.customProjects ? currentUser.customProjects.length : 0;
+    if (targetProjectScore > 0 && projectScore < targetProjectScore) {
+        projectScore += Math.min(customBonus, targetProjectScore - projectScore);
+    }
+
+    const skillPercentage = (userEarnedScore / totalRequiredScore) * 100;
+    const projectPercentage = targetProjectScore > 0 ? (projectScore / targetProjectScore) * 100 : 100;
+    
+    // Final Match is 80% skills, 20% projects
+    if (targetProjectScore > 0) {
+        currentUser.baseMatchScore = Math.round((skillPercentage * 0.8) + (projectPercentage * 0.2));
+    } else {
+        currentUser.baseMatchScore = Math.round(skillPercentage);
+    }
+    
     currentUser.totalRequiredScore = totalRequiredScore;
+    currentUser.skillPercentage = skillPercentage;
+    currentUser.projectPercentage = projectPercentage;
     
     renderMatchMissingSkills();
 }
@@ -621,6 +774,62 @@ function goToProspects() {
     document.getElementById('prospect-scope').textContent = role.marketInsights.futureScope;
     document.getElementById('prospect-avg').textContent = role.marketInsights.fresherSalary;
     document.getElementById('prospect-max').textContent = role.marketInsights.maxSalary;
+
+    // Update Summary Section
+    const roleNameSummary = document.getElementById('summary-role-name');
+    if (roleNameSummary) roleNameSummary.textContent = role.title;
+
+    const learnedListSummary = document.getElementById('summary-learned-list');
+    if (learnedListSummary) {
+        learnedListSummary.innerHTML = '';
+        const learnedEntries = Object.entries(currentUser.learnedSkills);
+        if (learnedEntries.length === 0) {
+            learnedListSummary.innerHTML = '<li><i class="fa-solid fa-info-circle" style="color: var(--warning);"></i> No skills logged yet.</li>';
+        } else {
+            learnedEntries.forEach(([sid, lvl]) => {
+                const sdef = APP_DATA.skills.find(s => s.id === sid);
+                learnedListSummary.innerHTML += `<li><i class="fa-solid fa-circle-check"></i> <span><strong>${sdef ? sdef.name : sid}</strong>: ${lvl}</span></li>`;
+            });
+        }
+        
+        // Add projects if any
+        const hasPredefined = currentUser.completedProjects && currentUser.completedProjects.length > 0;
+        const customProjects = currentUser.customProjects || [];
+        const hasCustom = customProjects.length > 0;
+
+        if (hasPredefined || hasCustom) {
+            learnedListSummary.innerHTML += '<li style="margin-top: 0.5rem; border-top: 1px solid var(--glass-border); padding-top: 0.5rem; font-weight: 600; color: var(--accent-secondary);">Completed Projects:</li>';
+            
+            if (hasPredefined) {
+                currentUser.completedProjects.forEach(pid => {
+                    const pdef = APP_DATA.projects.find(p => p.id === pid);
+                    learnedListSummary.innerHTML += `<li><i class="fa-solid fa-check-double" style="color: var(--warning);"></i> ${pdef ? pdef.name : pid}</li>`;
+                });
+            }
+
+            if (hasCustom) {
+                customProjects.forEach(proj => {
+                    learnedListSummary.innerHTML += `<li><i class="fa-solid fa-pen-nib" style="color: var(--warning);"></i> ${proj.name} (Custom)</li>`;
+                });
+            }
+        }
+    }
+
+    const outcomesListSummary = document.getElementById('summary-outcomes-list');
+    if (outcomesListSummary) {
+        outcomesListSummary.innerHTML = '';
+        Object.entries(role.requiredSkills).forEach(([sid, targetLvl]) => {
+            const sdef = APP_DATA.skills.find(s => s.id === sid);
+            const userLvl = currentUser.learnedSkills[sid] || 'None';
+            const isMet = LEVEL_VALUES[userLvl] >= LEVEL_VALUES[targetLvl];
+            
+            outcomesListSummary.innerHTML += `
+                <li>
+                    <i class="fa-solid ${isMet ? 'fa-square-check' : 'fa-square'}" style="color: ${isMet ? 'var(--success)' : 'var(--text-secondary)'};"></i>
+                    <span><strong>${sdef ? sdef.name : sid}</strong>: Target ${targetLvl}</span>
+                </li>`;
+        });
+    }
 
     const companiesContainer = document.getElementById('prospect-companies');
     if (companiesContainer) {
